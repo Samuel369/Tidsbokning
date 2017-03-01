@@ -31,7 +31,7 @@ public class Program {
 				for (BookedTime s : lista)
 					System.out.println(s.toString());
 				break;
-			// Tar bort en bokning från listan. Fungerar inte just nu.
+			// Tar bort en bokning från listan. 
 			case "3":
 				BookingRemover.removeBooking(bh, reader);
 				break;

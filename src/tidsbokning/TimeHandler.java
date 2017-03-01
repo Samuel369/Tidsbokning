@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class TimeHandler {
 
@@ -35,17 +36,22 @@ public class TimeHandler {
 		String dateMonth = reader.readLine();
 		System.out.println("Ange dag [DD]: ");
 		String dateDay = reader.readLine();
-		System.out.println("Ange tid [HH:MM]: ");
+		System.out.println("Ange starttid [HH:MM]: ");
 		String time = reader.readLine();
 		String dateTime = dateYear + "-" + dateMonth + "-" + dateDay + " " + time;
-		LocalDateTime b = th.formatter(dateTime);
-		System.out.println("Sluttid tid [HH:MM]: ");
+		System.out.println("Ange sluttid [HH:MM]: ");
 		String endTime = reader.readLine();
 		String dateEndTime = dateYear + "-" + dateMonth + "-" + dateDay + " " + endTime;
-		LocalDateTime e = th.formatter(dateEndTime);
-		System.out.println("Från: " + b.format(formatter) + " \nTill: " + e.format(formatter));
-		BookedTime c = bh.createBooking(name, b, e);
-		bh.addBooking(c);
+		try {
+			LocalDateTime b = th.formatter(dateTime);
+			LocalDateTime e = th.formatter(dateEndTime);
+			System.out.println("Från: " + b.format(formatter) + " \nTill: " + e.format(formatter));
+			BookedTime c = bh.createBooking(name, b, e);
+			bh.addBooking(c);
+		} catch (DateTimeParseException e) {
+			System.out.println("Ett fel: " + e.getClass().getSimpleName() + " : " + e.getMessage()
+					+ "\nMåste ange datum och tid enligt formatet som efterfrågas.");
+		}
 	}
 
 }

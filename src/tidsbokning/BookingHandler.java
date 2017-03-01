@@ -25,6 +25,7 @@ public class BookingHandler {
 		if (BookingHandler.check(b))
 			bookingList.add(b);
 		else
+			System.out.println("Den angivna tiden är upptagen, testa en annan tid.");
 			return;
 	}
 
