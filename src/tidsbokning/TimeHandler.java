@@ -10,29 +10,28 @@ import java.time.format.DateTimeParseException;
 public class TimeHandler {
 
 	static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-	static BookingHandler bh = new BookingHandler();
 	static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-	static TimeHandler th = new TimeHandler();
 
-	// Omformatterar input fr�n anv�ndaren till LocalDateTime.
+	// Omformatterar input från användaren till LocalDateTime.
 	public LocalDateTime formatter(String time) throws IOException {
-
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
 		LocalDateTime formatDateTime = LocalDateTime.parse(time, formatter);
 
 		return formatDateTime;
 	}
 
-	// Tar input fr�n anv�ndaren och omformatterar den till
-	// LocalDateTime. Sedan skriver den ut det anv�ndaren angett och
-	// l�gger till det till en arraylist.
+	// Tar input från användaren och omformatterar den till
+	// LocalDateTime. Sedan skriver den ut det användaren angett och
+	// lägger till det till en arraylist.
 	public void case1(BookingHandler bh, BufferedReader reader) throws IOException {
-		System.out.println("Ange ditt namn: ");
-		String name = reader.readLine();
-		System.out.println("Ange �r [YYYY]: ");
+		String name = null;
+		do {
+			System.out.println("Ange ditt namn: ");
+			name = reader.readLine();
+		} while (name.equals(""));
+		System.out.println("Ange år [YYYY]: ");
 		String dateYear = reader.readLine();
-		System.out.println("Ange m�nad [MM]: ");
+		System.out.println("Ange månad [MM]: ");
 		String dateMonth = reader.readLine();
 		System.out.println("Ange dag [DD]: ");
 		String dateDay = reader.readLine();
@@ -43,15 +42,65 @@ public class TimeHandler {
 		String endTime = reader.readLine();
 		String dateEndTime = dateYear + "-" + dateMonth + "-" + dateDay + " " + endTime;
 		try {
-			LocalDateTime b = th.formatter(dateTime);
-			LocalDateTime e = th.formatter(dateEndTime);
-			System.out.println("Fr�n: " + b.format(formatter) + " \nTill: " + e.format(formatter));
+			LocalDateTime b = formatter(dateTime);
+			LocalDateTime e = formatter(dateEndTime);
+			System.out.println("Från: " + b.format(formatter) + " \nTill: " + e.format(formatter));
 			BookedTime c = bh.createBooking(name, b, e);
 			bh.addBooking(c);
 		} catch (DateTimeParseException e) {
-			System.out.println("Ett fel: " + e.getClass().getSimpleName() + " : " + e.getMessage()
-					+ "\nM�ste ange datum och tid enligt formatet som efterfr�gas.");
+			System.out.println("Du måste ange datum och tid enligt formatet som efterfrågas.\n");
 		}
+	}
+
+	// Ändrar informationen för en angedd bokning.
+	public void editor(BookingHandler bh, BufferedReader reader) throws IOException {
+		System.out.println("Ange namnet för bokningen du vill redigera:");
+		BookedTime b1 = bh.getBooking(reader.readLine());
+		System.out.println(b1.getName());
+		String svar = "";
+		do {
+			System.out.println("1. Redigera det bokade namnet.\n2. Redigera den bokade tiden.\n3. Gå till huvudmeny.");
+			svar = reader.readLine();
+
+			switch (svar) {
+
+			case "1":
+				System.out.println("Ange nytt namn:");
+				String nameToFind = reader.readLine();
+				if (!nameToFind.trim().equals(svar))
+					b1.setName(nameToFind);
+				break;
+			case "2":
+				System.out.println("Ange år [YYYY]: ");
+				String dateYear = reader.readLine();
+				System.out.println("Ange månad [MM]: ");
+				String dateMonth = reader.readLine();
+				System.out.println("Ange dag [DD]: ");
+				String dateDay = reader.readLine();
+				System.out.println("Ange starttid [HH:MM]: ");
+				String time = reader.readLine();
+				String dateTime = dateYear + "-" + dateMonth + "-" + dateDay + " " + time;
+				System.out.println("Ange sluttid [HH:MM]: ");
+				String endTime = reader.readLine();
+				String dateEndTime = dateYear + "-" + dateMonth + "-" + dateDay + " " + endTime;
+				try {
+					LocalDateTime b = formatter(dateTime);
+					LocalDateTime e = formatter(dateEndTime);
+					System.out.println("Från: " + b.format(formatter) + " \nTill: " + e.format(formatter));
+					if (!dateTime.trim().equals(svar))
+						b1.setBeginTid(b);
+					b1.setEndTime(e);
+				} catch (DateTimeParseException e) {
+					System.out.println("Du måste ange datum och tid enligt formatet som efterfrågas.\n");
+				}
+				break;
+			default:
+				break;
+
+			}
+		} while (!svar.equals("3"));
+		System.out.println("Går tillbaka till huvudmeny..\n");
+
 	}
 
 }

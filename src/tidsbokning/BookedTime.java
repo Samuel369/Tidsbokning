@@ -42,7 +42,11 @@ public class BookedTime {
 
 	@Override
 	public String toString() {
-		return name + ": " + getBeginTime().format(formatter).toString() + " -> "
+		return name + ": " + getBeginTime().format(formatter).toString() + " > "
+				+ getEndTime().format(formatter).toString();
+	}
+	public String toFileFormat() {
+		return name + "," + getBeginTime().format(formatter).toString() + ","
 				+ getEndTime().format(formatter).toString();
 	}
 
