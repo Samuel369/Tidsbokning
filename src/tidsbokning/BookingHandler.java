@@ -50,15 +50,12 @@ public class BookingHandler {
 		LocalDateTime startTime = LocalDateTime.parse(beginTime, formatter);
 		LocalDateTime stopTime = LocalDateTime.parse(endTime, formatter);*/
 		
-		do{
 		for (BookedTime s : bookingList)
 			if (checkBegin.isAfter(s.getEndTime()) || checkEnd.isBefore(s.getBeginTime())
-					/*|| checkBegin.isAfter(startTime) || checkEnd.isBefore(stopTime)*/)
-				return true;
+					/*|| checkBegin.isAfter(startTime) || checkEnd.isBefore(stopTime)*/);
 			else if (checkBegin.isBefore(s.getEndTime()) || checkEnd.isAfter(s.getBeginTime())
 					/*|| checkBegin.isBefore(startTime) || checkEnd.isAfter(stopTime)*/)
 				return false;
-		} while (b.equals(false));
 		return true;
 
 	}
