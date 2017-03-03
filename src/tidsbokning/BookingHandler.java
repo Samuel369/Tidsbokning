@@ -62,7 +62,7 @@ public class BookingHandler {
 		return true;
 
 	}
-
+	//Tar bort en bokning.
 	public void removeBooking(BookedTime c) {
 		bookingList.remove(c);
 	}
@@ -77,7 +77,7 @@ public class BookingHandler {
 	public ArrayList<BookedTime> getBooking() {
 		return bookingList;
 	}
-
+	//Anropar metoden för att ta bort en bokning.
 	public void removeBooking(BufferedReader reader) throws IOException {
 
 		System.out.println("Ange namnet för den bokade tiden du vill ta bort:");
@@ -90,7 +90,7 @@ public class BookingHandler {
 			System.out.println("Ett fel: " + e.getClass().getSimpleName() + " : " + e.getMessage());
 		}
 	}
-
+	//Sparar bokningar i en ny fil.
 	public void saveBookings(String b) {
 		ArrayList<BookedTime> lista = getBooking();
 		try (BufferedWriter writer = Files.newBufferedWriter(Paths.get("Bookings", b), StandardCharsets.UTF_8,
@@ -104,7 +104,7 @@ public class BookingHandler {
 			System.out.println("Error. Du måste skriva in ett korrekt namn på filen.\n");
 		}
 	}
-
+	//Laddar upp bokningar från en fil.
 	public void loadBookings(String b) throws IOException {
 		BookingHandler bh = new BookingHandler();
 		try (Scanner scanner = new Scanner(new File("Bookings", b));) {

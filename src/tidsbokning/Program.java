@@ -19,11 +19,11 @@ public class Program {
 		do {
 			System.out.println(
 					"1. Boka tid.\n2. Se bokade tider.\n3. Redigera bokning.\n4. Ta bort bokning.\n5. Spara bokningar.\n"
-							+ "6. Läs tidigare bokningar.\n7. Avsluta.");
+							+ "6. Ladda upp tidigare bokningar.\n7. Avsluta.");
 			svar = reader.readLine();
 
 			switch (svar) {
-
+			//Skapar en bokad tid.
 			case "1":
 				th.case1(bh, reader);
 				break;
@@ -41,17 +41,20 @@ public class Program {
 			case "4":
 				bh.removeBooking(reader);
 				break;
+			//Sparar en bokning i en ny fil.
 			case "5":
 				System.out.println(
 						"Ange namnet på filen du vill spara: (Om filen inte existerar redan så kommer den att skapas.)");
 				String s = reader.readLine();
 				bh.saveBookings(s);
 				break;
+			//Laddar upp bokningar från en fil.
 			case "6":
-				System.out.println("Ange namnet på filen du vill läsa bokningar från:");
+				System.out.println("Ange namnet på filen du vill ladda upp bokningar från:");
 				String l = reader.readLine();
 				bh.loadBookings(l);
 				break;
+			//Avslutar.
 			case "7":
 				break;
 			default:
