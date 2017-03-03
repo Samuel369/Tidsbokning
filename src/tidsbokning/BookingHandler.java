@@ -13,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class BookingHandler {
@@ -26,40 +25,39 @@ public class BookingHandler {
 		bookingList = new ArrayList<BookedTime>();
 	}
 
-	// För att skapa nya bokningar.
+	// Skapar nya bokningar.
 	public BookedTime createBooking(String name, LocalDateTime beginTime, LocalDateTime endTime) {
 		return new BookedTime(name, beginTime, endTime);
 	}
 
-	// För att lägga till nya bokningar i arraylisten.
-	public void addBooking(BookedTime b) {
-		if (BookingHandler.check(b))
+	// Lägger till nya bokningar i arraylisten.
+	public void addBooking(BookedTime b, LocalDateTime bDT, LocalDateTime eDT) {
+		if (BookingHandler.check(b, bDT, eDT))
 			bookingList.add(b);
-		else
-			System.out.println("Den angivna tiden är upptagen, testa en annan tid.\n");
 		return;
 	}
 
-	// För att kontrollera att inga tider överskrider varandra.
-	public static boolean check(BookedTime b) {
+	// Kontrollerar att inga tider överskrider varandra.
+	public static boolean check(BookedTime b, LocalDateTime bDT, LocalDateTime eDT) {
 		LocalDateTime checkBegin = b.getBeginTime();
 		LocalDateTime checkEnd = b.getEndTime();
-		/*String beginTime = "08:00";
-		String endTime = "18:00";
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-		LocalDateTime startTime = LocalDateTime.parse(beginTime, formatter);
-		LocalDateTime stopTime = LocalDateTime.parse(endTime, formatter);*/
-		
+
+		if (checkBegin.isBefore(bDT) || checkEnd.isAfter(eDT)) {
+			System.out.println("Kan inte boka en tid när det är stängt!\n");
+			return false;
+		}
 		for (BookedTime s : bookingList)
-			if (checkBegin.isAfter(s.getEndTime()) || checkEnd.isBefore(s.getBeginTime())
-					/*|| checkBegin.isAfter(startTime) || checkEnd.isBefore(stopTime)*/);
-			else if (checkBegin.isBefore(s.getEndTime()) || checkEnd.isAfter(s.getBeginTime())
-					/*|| checkBegin.isBefore(startTime) || checkEnd.isAfter(stopTime)*/)
+			if (checkBegin.isAfter(s.getEndTime()) || checkEnd.isBefore(s.getBeginTime()))
+				;
+			else if (checkBegin.isBefore(s.getEndTime()) || checkEnd.isAfter(s.getBeginTime())) {
+				System.out.println("Den angivna tiden är upptagen, testa en annan tid.\n");
 				return false;
+			}
 		return true;
 
 	}
-	//Tar bort en bokning.
+
+	// Tar bort en bokning.
 	public void removeBooking(BookedTime c) {
 		bookingList.remove(c);
 	}
@@ -74,7 +72,8 @@ public class BookingHandler {
 	public ArrayList<BookedTime> getBooking() {
 		return bookingList;
 	}
-	//Anropar metoden för att ta bort en bokning.
+
+	// Anropar metoden för att ta bort en bokning.
 	public void removeBooking(BufferedReader reader) throws IOException {
 
 		System.out.println("Ange namnet för den bokade tiden du vill ta bort:");
@@ -87,7 +86,8 @@ public class BookingHandler {
 			System.out.println("Ett fel: " + e.getClass().getSimpleName() + " : " + e.getMessage());
 		}
 	}
-	//Sparar bokningar i en ny fil.
+
+	// Sparar bokningar i en ny fil.
 	public void saveBookings(String b) {
 		ArrayList<BookedTime> lista = getBooking();
 		try (BufferedWriter writer = Files.newBufferedWriter(Paths.get("Bookings", b), StandardCharsets.UTF_8,
@@ -101,7 +101,8 @@ public class BookingHandler {
 			System.out.println("Error. Du måste skriva in ett korrekt namn på filen.\n");
 		}
 	}
-	//Laddar upp bokningar från en fil.
+
+	// Laddar upp bokningar från en fil. Fungerar inte just nu, ska fixas!
 	public void loadBookings(String b) throws IOException {
 		BookingHandler bh = new BookingHandler();
 		try (Scanner scanner = new Scanner(new File("Bookings", b));) {
@@ -109,10 +110,17 @@ public class BookingHandler {
 				String s = scanner.nextLine();
 				String[] arr = s.split(",");
 				try {
+					// Ska fixas!
 					LocalDateTime b1 = th.formatter(arr[1]);
 					LocalDateTime e = th.formatter(arr[2]);
+					String fBeginTime = "08:00";
+					String fEndTime = "18:00";
+					String fixedBeginTime = arr[1] + " " + fBeginTime;
+					String fixedEndTime = arr[1] + " " + fEndTime;
+					LocalDateTime bDT = th.formatter(fixedBeginTime);
+					LocalDateTime eDT = th.formatter(fixedEndTime);
 					BookedTime c = bh.createBooking(arr[0], b1, e);
-					bh.addBooking(c);
+					bh.addBooking(c, bDT, eDT);
 				} catch (DateTimeParseException e) {
 					System.out.println("Fel format i filen.\n");
 				}
