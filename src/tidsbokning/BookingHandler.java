@@ -36,7 +36,7 @@ public class BookingHandler {
 		if (BookingHandler.check(b))
 			bookingList.add(b);
 		else
-			System.out.println("Den angivna tiden är upptagen, testa en annan tid.");
+			System.out.println("Den angivna tiden är upptagen, testa en annan tid.\n");
 		return;
 	}
 
@@ -44,19 +44,21 @@ public class BookingHandler {
 	public static boolean check(BookedTime b) {
 		LocalDateTime checkBegin = b.getBeginTime();
 		LocalDateTime checkEnd = b.getEndTime();
-		String beginTime = "08:00";
+		/*String beginTime = "08:00";
 		String endTime = "18:00";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 		LocalDateTime startTime = LocalDateTime.parse(beginTime, formatter);
-		LocalDateTime stopTime = LocalDateTime.parse(endTime, formatter);
-
+		LocalDateTime stopTime = LocalDateTime.parse(endTime, formatter);*/
+		
+		do{
 		for (BookedTime s : bookingList)
 			if (checkBegin.isAfter(s.getEndTime()) || checkEnd.isBefore(s.getBeginTime())
-					|| checkBegin.isAfter(startTime) || checkEnd.isBefore(stopTime))
+					/*|| checkBegin.isAfter(startTime) || checkEnd.isBefore(stopTime)*/)
 				return true;
 			else if (checkBegin.isBefore(s.getEndTime()) || checkEnd.isAfter(s.getBeginTime())
-					|| checkBegin.isBefore(startTime) || checkEnd.isAfter(stopTime))
+					/*|| checkBegin.isBefore(startTime) || checkEnd.isAfter(stopTime)*/)
 				return false;
+		} while (b.equals(false));
 		return true;
 
 	}
@@ -99,7 +101,7 @@ public class BookingHandler {
 				writer.newLine();
 			}
 		} catch (IOException e) {
-			System.out.println("Error. Du måste skriva in ett korrekt namn på filen");
+			System.out.println("Error. Du måste skriva in ett korrekt namn på filen.\n");
 		}
 	}
 
@@ -119,7 +121,7 @@ public class BookingHandler {
 				}
 			}
 		} catch (FileNotFoundException e) {
-			System.out.println("Du måste ange det korrekta namnet på filen du vill använda.");
+			System.out.println("Du måste ange det korrekta namnet på filen du vill använda.\n");
 		}
 	}
 }

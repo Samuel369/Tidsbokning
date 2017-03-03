@@ -52,7 +52,10 @@ public class Program {
 				String l = reader.readLine();
 				bh.loadBookings(l);
 				break;
+			case "7":
+				break;
 			default:
+				System.out.println("Det angivna menyvalet finns inte.\n");
 				break;
 			}
 			// Avslutar programmet om man trycker in "6" i huvudmenyn.
